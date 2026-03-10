@@ -35,83 +35,31 @@ class PaymentTest {
     void testCreatePaymentWithVoucherCodeSuccess() {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
-        String paymentId = String.format("payment-voucher-%s", order.getId());
+        String paymentId = "348fa642-e16d-4888-92fa-3fc86f8d030c";
 
-        Payment payment = new Payment(paymentId, "VOUCHER", paymentData, order);
+        Payment payment = new Payment(paymentId, "VOUCHER", "SUCCESS", paymentData, order);
 
         assertEquals(paymentId, payment.getId());
         assertEquals("VOUCHER", payment.getMethod());
         assertEquals("SUCCESS", payment.getStatus());
         assertEquals(paymentData.get("voucherCode"), payment.getPaymentData().get("voucherCode"));
 
-        assertEquals(OrderStatus.SUCCESS.getValue(), order.getStatus());
-    }
-
-
-
-    @Test
-    void testCreatePaymentWithVoucherCodeInvalidLengthCode() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP1234ABC567");
-        String paymentId = String.format("payment-voucher-%s", order.getId());
-
-        Payment payment = new Payment(paymentId, "VOUCHER", paymentData, order);
-
-        assertNotEquals(16, payment.getPaymentData().get("voucherCode").length());
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
     }
 
     @Test
-    void testCreatePaymentWithVoucherCodeNull() {
+    void testCreatePaymentEmptyOrder() {
+        this.order = null;
         Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", null);
-        String paymentId = String.format("payment-voucher-%s", order.getId());
+        paymentData.put("voucherCode", "ESHOP1234ABC5678");
 
-        Payment payment = new Payment(paymentId, "VOUCHER", paymentData, order);
-
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
+        assertThrows(IllegalArgumentException.class, () -> {
+            Payment payment = new Payment("28ef3989-58d5-4a5c-9a23-c1b84ee26dc6",
+                    "VOUCHER", "SUCCESS", paymentData, order);
+        });
     }
 
-    @Test
-    void testCreatePaymentWithVoucherCodeEmptyString() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "");
-        String paymentId = String.format("payment-voucher-%s", order.getId());
 
-        Payment payment = new Payment(paymentId, "VOUCHER", paymentData, order);
 
-        assertNotEquals(16, payment.getPaymentData().get("voucherCode").length());
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
-    }
-
-    @Test
-    void testCreatePaymentWithVoucherCodeInvalidStartedChars() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "SSHOP1234ABC567");
-        String paymentId = String.format("payment-voucher-%s", order.getId());
-
-        Payment payment = new Payment(paymentId, "VOUCHER", paymentData, order);
-
-        assertNotEquals("ESHOP", payment.getId().substring(0, 5));
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
-    }
-
-    @Test
-    void testCreatePaymentWithVoucherCodeDoesNotContainEightNumericalChars() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOPA234ABC567");
-        String paymentId = String.format("payment-voucher-%s", order.getId());
-
-        Payment payment = new Payment(paymentId, "VOUCHER", paymentData, order);
-
-        assertNotEquals(8, payment.getId().replaceAll("\\D", "").length());
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
-    }
 
 
     @Test
@@ -119,9 +67,9 @@ class PaymentTest {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("bankName", "BCA");
         paymentData.put("referenceCode", "REF123456");
-        String paymentId = String.format("payment-bank-%s", order.getId());
+        String paymentId = "348fa642-e16d-4888-92fa-3fc86f8d030c";
 
-        Payment payment = new Payment(paymentId, "BANK", paymentData, order);
+        Payment payment = new Payment(paymentId, "BANK", "SUCCESS", paymentData, order);
 
         assertEquals(paymentId, payment.getId());
         assertEquals("BANK", payment.getMethod());
@@ -129,100 +77,21 @@ class PaymentTest {
         assertEquals(paymentData.get("bankName"), payment.getPaymentData().get("bankName"));
         assertEquals(paymentData.get("referenceCode"), payment.getPaymentData().get("referenceCode"));
 
-        assertEquals(OrderStatus.SUCCESS.getValue(), order.getStatus());
     }
 
-    @Test
-    void testCreatePaymentWithBankTransferIfPaymentDataEmptyString() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("bankName", "");
-        paymentData.put("referenceCode", "");
-        String paymentId = String.format("payment-bank-%s", order.getId());
-
-        Payment payment = new Payment(paymentId, "BANK", paymentData, order);
-
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
-    }
-
-    @Test
-    void testCreatePaymentWithBankTransferIfPaymentDataNull() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("bankName", null);
-        paymentData.put("referenceCode", null);
-        String paymentId = String.format("payment-bank-%s", order.getId());
-
-        Payment payment = new Payment(paymentId, "BANK", paymentData, order);
-
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
-    }
-
-    @Test
-    void testCreatePaymentWithBankTransferIfPaymentDataBankNameEmptyString() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("bankName", "");
-        paymentData.put("referenceCode", "REF12345");
-        String paymentId = String.format("payment-bank-%s", order.getId());
-
-        Payment payment = new Payment(paymentId, "BANK", paymentData, order);
-
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
-    }
-
-    @Test
-    void testCreatePaymentWithBankTransferIfPaymentDataBankNameNull() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("bankName", null);
-        paymentData.put("referenceCode", "REF12345");
-        String paymentId = String.format("payment-bank-%s", order.getId());
-
-        Payment payment = new Payment(paymentId, "BANK", paymentData, order);
-
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
-    }
-
-    @Test
-    void testCreatePaymentWithBankTransferIfPaymentDataReferenceCodeEmptyString() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("bankName", "BCA");
-        paymentData.put("referenceCode", "");
-        String paymentId = String.format("payment-bank-%s", order.getId());
-
-        Payment payment = new Payment(paymentId, "BANK", paymentData, order);
-
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
-    }
-
-    @Test
-    void testCreatePaymentWithBankTransferIfPaymentDataReferenceCodeNull() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("bankName", "BCA");
-        paymentData.put("referenceCode", null);
-        String paymentId = String.format("payment-bank-%s", order.getId());
-
-        Payment payment = new Payment(paymentId, "BANK", paymentData, order);
-
-        assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
-    }
 
     @Test
     void testSetStatusToSuccess() {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("bankName", "BCA");
         paymentData.put("referenceCode", "REF123456");
-        String paymentId = String.format("payment-bank-%s", order.getId());
+        String paymentId = "348fa642-e16d-4888-92fa-3fc86f8d030c";
 
-        Payment payment = new Payment(paymentId, "BANK", paymentData, order);
+        Payment payment = new Payment(paymentId, "BANK", "REJECTED", paymentData, order);
 
         payment.setStatus("SUCCESS");
 
         assertEquals("SUCCESS", payment.getStatus());
-        assertEquals(OrderStatus.SUCCESS.getValue(), order.getStatus());
 
     }
 
@@ -231,14 +100,13 @@ class PaymentTest {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("bankName", "BCA");
         paymentData.put("referenceCode", "REF123456");
-        String paymentId = String.format("payment-bank-%s", order.getId());
+        String paymentId = "348fa642-e16d-4888-92fa-3fc86f8d030c";
 
-        Payment payment = new Payment(paymentId, "BANK", paymentData, order);
+        Payment payment = new Payment(paymentId, "BANK", "SUCCESS", paymentData, order);
 
         payment.setStatus("REJECTED");
 
         assertEquals("REJECTED", payment.getStatus());
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
 
     }
 
@@ -247,9 +115,9 @@ class PaymentTest {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("bankName", "BCA");
         paymentData.put("referenceCode", "REF123456");
-        String paymentId = String.format("payment-bank-%s", order.getId());
+        String paymentId = "348fa642-e16d-4888-92fa-3fc86f8d030c";
 
-        Payment payment = new Payment(paymentId, "BANK", paymentData, order);
+        Payment payment = new Payment(paymentId, "BANK", "SUCCESS", paymentData, order);
 
         assertThrows(IllegalArgumentException.class,
                 () -> payment.setStatus("HOHO")
