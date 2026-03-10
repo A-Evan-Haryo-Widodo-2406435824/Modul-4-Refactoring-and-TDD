@@ -1,3 +1,15 @@
+# Module-4
+## Is TDD flow useful enough?
+Menurut saya, flow ini sangat berguna dalam development yang memikirkan dengan baik terkait maintainability karena dalam pengembangan tidak langsung menulis logika kodenya, tetapi mempersiapkan dengan unit-test terlebih dahulu. Hal ini memberikan jaminan bahwa fungsionalitas dan desain sistem akan sesuai sejak awal. Lalu, melalui penulisan unit-test di awal, saya sebagai pengembang juga diberikan kesempatan untuk memikirkan berbagai skenario yang akan terjadi pada program saya. Hal tersebut ditunjukkan dalam pembuatan happy dan unhappy test. Setelah itu, memasuki fase pengimplementasian, penulisan kode juga jauh lebih terbayangkan akan setiap skenario sehingga development lebih straight to the point. Selain itu, saya juga lebih merasa mudah untuk refactoring karena adanya unit-test yang dibuat di awal, saya dapat melakukan uji coba lebih lanjut bahwa apa yang saya modifikasi tidak berdampak buruk ke program utama. 
+
+## Have I followed F.I.R.S.T principle while creating the unit-tests?
+Menurut saya unit-test yang dibuat sudah memenuhi prinsip F.I.R.S.T karena
+- Semua test berjalan di bawah 1 detik karena tidak ada kondeksi ke database atau jaringan lainnya (Fast)
+- Setiap test case berdiri sendiri dan tidak bergantung kepada state testcase lain. Hal ini salah satunya ditandai setting nilai awal pada @BeforeEach (Indpendent)
+- Test dapat dijalankan di environment secara berulang (Repeatable)
+- Setiap test memiki assertions yang jelas atau tidak perlu melihat konsol secara manual untuk menguji validitasnya (Self-validating)
+- Testcase yang dibuat mengikuti TDD cycle sehingga dibuat sebelum fungsinya diimplementasikan (Timely)
+
 # Module-3
 ## Solid Principles I applied
 - **Single Responsibility Principle (SRP)**
