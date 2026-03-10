@@ -1,6 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
-import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,11 +37,11 @@ class PaymentTest {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
         String paymentId = "348fa642-e16d-4888-92fa-3fc86f8d030c";
 
-        Payment payment = new Payment(paymentId, "VOUCHER", "SUCCESS", paymentData, order);
+        Payment payment = new Payment(paymentId, "VOUCHER", PaymentStatus.SUCCESS.getValue(), paymentData, order);
 
         assertEquals(paymentId, payment.getId());
         assertEquals("VOUCHER", payment.getMethod());
-        assertEquals("SUCCESS", payment.getStatus());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
         assertEquals(paymentData.get("voucherCode"), payment.getPaymentData().get("voucherCode"));
 
     }
@@ -54,7 +54,7 @@ class PaymentTest {
 
         assertThrows(IllegalArgumentException.class, () -> {
             Payment payment = new Payment("28ef3989-58d5-4a5c-9a23-c1b84ee26dc6",
-                    "VOUCHER", "SUCCESS", paymentData, order);
+                    "VOUCHER", PaymentStatus.SUCCESS.getValue(), paymentData, order);
         });
     }
 
@@ -69,11 +69,11 @@ class PaymentTest {
         paymentData.put("referenceCode", "REF123456");
         String paymentId = "348fa642-e16d-4888-92fa-3fc86f8d030c";
 
-        Payment payment = new Payment(paymentId, "BANK", "SUCCESS", paymentData, order);
+        Payment payment = new Payment(paymentId, "BANK", PaymentStatus.SUCCESS.getValue(), paymentData, order);
 
         assertEquals(paymentId, payment.getId());
         assertEquals("BANK", payment.getMethod());
-        assertEquals("SUCCESS", payment.getStatus());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
         assertEquals(paymentData.get("bankName"), payment.getPaymentData().get("bankName"));
         assertEquals(paymentData.get("referenceCode"), payment.getPaymentData().get("referenceCode"));
 
@@ -87,11 +87,11 @@ class PaymentTest {
         paymentData.put("referenceCode", "REF123456");
         String paymentId = "348fa642-e16d-4888-92fa-3fc86f8d030c";
 
-        Payment payment = new Payment(paymentId, "BANK", "REJECTED", paymentData, order);
+        Payment payment = new Payment(paymentId, "BANK", PaymentStatus.REJECTED.getValue(), paymentData, order);
 
-        payment.setStatus("SUCCESS");
+        payment.setStatus(PaymentStatus.SUCCESS.getValue());
 
-        assertEquals("SUCCESS", payment.getStatus());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
 
     }
 
@@ -102,11 +102,11 @@ class PaymentTest {
         paymentData.put("referenceCode", "REF123456");
         String paymentId = "348fa642-e16d-4888-92fa-3fc86f8d030c";
 
-        Payment payment = new Payment(paymentId, "BANK", "SUCCESS", paymentData, order);
+        Payment payment = new Payment(paymentId, "BANK", PaymentStatus.SUCCESS.getValue(), paymentData, order);
 
-        payment.setStatus("REJECTED");
+        payment.setStatus(PaymentStatus.REJECTED.getValue());
 
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
 
     }
 
@@ -117,7 +117,7 @@ class PaymentTest {
         paymentData.put("referenceCode", "REF123456");
         String paymentId = "348fa642-e16d-4888-92fa-3fc86f8d030c";
 
-        Payment payment = new Payment(paymentId, "BANK", "SUCCESS", paymentData, order);
+        Payment payment = new Payment(paymentId, "BANK", PaymentStatus.SUCCESS.getValue(), paymentData, order);
 
         assertThrows(IllegalArgumentException.class,
                 () -> payment.setStatus("HOHO")
