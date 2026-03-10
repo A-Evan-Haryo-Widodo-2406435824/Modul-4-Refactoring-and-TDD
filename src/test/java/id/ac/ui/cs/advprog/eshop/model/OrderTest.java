@@ -18,12 +18,12 @@ class OrderTest {
         this.products = new ArrayList<>();
         Product product1 = new Product();
         product1.setProductId("37ef3989-58d5-4a5c-9a23-c1b84ee26dc6");
-        product1.setProductName("Sampo cap Bambang");
+        product1.setProductName("Sampo Cap Bambang");
         product1.setProductQuantity(2);
 
         Product product2 = new Product();
         product2.setProductId("48ef3989-58d5-4a5c-9a23-c1b84ee26dc6");
-        product2.setProductName("Sabun cap Usep");
+        product2.setProductName("Sabun Cap Usep");
         product2.setProductQuantity(1);
 
         this.products.add(product1);
