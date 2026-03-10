@@ -119,7 +119,7 @@ class PaymentRepositoryTest {
 
         Map<String, String> paymentData_2 = new HashMap<>();
         paymentData_2.put("voucherCode", "ESHOP1234ABC5679");
-        String paymentId_2 = "348fa642-e16d-4888-92fa-3fc86f8d030c";
+        String paymentId_2 = "458fa642-e16d-4888-92fa-3fc86f8d030c";
         Payment payment_2 = new Payment(paymentId_2, "VOUCHER", PaymentStatus.SUCCESS.getValue(), paymentData_2, order);
         paymentRepository.save(payment_2);
 
