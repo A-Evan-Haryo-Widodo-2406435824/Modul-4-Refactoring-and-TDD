@@ -280,7 +280,7 @@ public class PaymentServiceImplTest {
     void testGetPaymentIfIdNotFound() {
 
         doReturn(null).when(paymentRepository).findById("hehe");
-        assertNull(paymentService.findById("hehe"));
+        assertNull(paymentService.getPayment("hehe"));
     }
 
     @Test
